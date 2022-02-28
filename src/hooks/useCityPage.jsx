@@ -1,12 +1,14 @@
-import { useEffect, useDebugValue } from 'react'
+import { useState, useEffect, useDebugValue } from 'react'
 import axios from 'axios'
 import { useParams } from 'react-router-dom'
 import { getForecastUrl } from './../utils/urls'
 import getChartData from './../utils/transform/getChartData'
 import getForecastItemList from './../utils/transform/getForecastItemList'
-import { getCityCode } from './../utils/utils'
 
-const useCityPage = (allChartData, allForecastItemList, actions) => {
+const useCityPage = () => {
+    const [chartData, setChartData] = useState(null)
+    const [forecastItemList, setForecastItemList] = useState(null)
+
     const { city, countryCode } = useParams()
 
     useDebugValue(`useCityPage ${city}`)
@@ -14,32 +16,27 @@ const useCityPage = (allChartData, allForecastItemList, actions) => {
     useEffect(() => {
         const getForecast = async () => {
             const url = getForecastUrl({ city, countryCode })
-            const cityCode = getCityCode(city, countryCode)
+
             try {
                 const { data } = await axios.get(url)
                 
                 const dataAux = getChartData(data)
 
-                // onSetChartData({ [cityCode]: dataAux })
-                actions({ type: 'SET_CHART_DATA', payload: { [cityCode]: dataAux } })
+                setChartData(dataAux)
+
                 const forecastItemListAux = getForecastItemList(data)
 
-                // onSetForecastItemList({ [cityCode]: forecastItemListAux })  
-                actions({ type: 'SET_FORECAST_ITEM_LIST', payload: { [cityCode]: forecastItemListAux } })          
+                setForecastItemList(forecastItemListAux)            
             } catch (error) {
                 console.log(error)            
             }
         }
-        const cityCode = getCityCode(city, countryCode)
 
-        if (allChartData && allForecastItemList && !allChartData[cityCode] && !allForecastItemList[cityCode]) {
-            getForecast()
-        }
-        
+        getForecast()
 
-    }, [city, countryCode, actions, allChartData, allForecastItemList])
+    }, [city, countryCode])
 
-    return { city, countryCode }
+    return { city, countryCode, chartData, forecastItemList }
 }
 
 export default useCityPage
