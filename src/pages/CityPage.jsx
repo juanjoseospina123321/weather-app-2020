@@ -12,14 +12,20 @@ import useCityList from './../hooks/useCityList'
 import { getCityCode } from './../utils/utils'
 import { getCountryNameByCountryCode } from './../utils/serviceCities'
 
-const CityPage = ({onSetAllWeather, allWeather}) => {
-    const { city, countryCode, chartData, forecastItemList } = useCityPage()
+const CityPage = ({actions, data}) => {
+    const { allWeather, allChartData, allForecastItemList } = data
+    const { onSetAllWeather, onSetChartData, onSetForecastItemList } = actions
+    const { city, countryCode } = useCityPage(allChartData, allForecastItemList, onSetChartData, onSetForecastItemList)
 
     const cities = useMemo(() => ([{ city, countryCode }]), [city, countryCode])
 
     useCityList(cities, allWeather, onSetAllWeather)
     
-    const weather = allWeather[getCityCode(city, countryCode)]
+    const cityCode = getCityCode(city, countryCode)
+
+    const weather = allWeather[cityCode]
+    const chartData = allChartData[cityCode]
+    const forecastItemList = allForecastItemList[cityCode]
 
     const country = countryCode && getCountryNameByCountryCode(countryCode)
     const humidity = weather && weather.humidity
@@ -27,15 +33,14 @@ const CityPage = ({onSetAllWeather, allWeather}) => {
 
     const state = weather && weather.state
     const temperature = weather && weather.temperature
-
     return (
         <AppFrame>
             <Grid container
                 justify="space-around"
                 direction="column"
                 spacing={2}>
-                <Grid item container 
-                    xs={12} 
+                <Grid item container
+                    xs={12}
                     justify="center"
                     alignItems="flex-end">
                     <CityInfo city={city} country={country} />
@@ -44,9 +49,9 @@ const CityPage = ({onSetAllWeather, allWeather}) => {
                     justify="center">
                     <Weather state={state} temperature={temperature} />
                     {
-                        humidity && wind && 
-                        <WeatherDetails 
-                            humidity={humidity} 
+                        humidity && wind &&
+                        <WeatherDetails
+                            humidity={humidity}
                             wind={wind} />
                     }
                 </Grid>
@@ -65,7 +70,7 @@ const CityPage = ({onSetAllWeather, allWeather}) => {
                         forecastItemList && <Forecast forecastItemList={forecastItemList} />
                     }
                 </Grid>
-            </Grid>        
+            </Grid>
         </AppFrame>
     )
 }

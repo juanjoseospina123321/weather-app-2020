@@ -19,9 +19,9 @@ const renderCityAndCountry = eventOnClickCity => (cityAndCountry, weather) => {
     return (
         <ListItem
             button
-            key={getCityCode(city, countryCode)} 
+            key={getCityCode(city, countryCode)}
             onClick={() => eventOnClickCity(city, countryCode)} >
-            <Grid container 
+            <Grid container
                 justify="center"
                 alignItems="center"
             >
@@ -33,9 +33,9 @@ const renderCityAndCountry = eventOnClickCity => (cityAndCountry, weather) => {
                 <Grid item
                     md={3}
                     xs={12}>
-                    <Weather 
-                        temperature={weather && weather.temperature} 
-                        state={weather && weather.state} /> 
+                    <Weather
+                        temperature={weather && weather.temperature}
+                        state={weather && weather.state} />
                 </Grid>
             </Grid>
         </ListItem>
@@ -44,10 +44,12 @@ const renderCityAndCountry = eventOnClickCity => (cityAndCountry, weather) => {
 
 // cities: es un array, y en cada item tiene que tener la ciudad, pero además el country
 // ul: tag html para listas no ordenadas
-const CityList = ({ cities, onClickCity, onSetAllWeather, allWeather }) => {
-
-    const { error, setError } = useCityList(cities, allWeather, onSetAllWeather)
+const CityList = ({ cities, onClickCity, actions, data }) => {
+    const {allWeather}=data;
+    const { onSetAllWeather } = actions;
     
+    const { error, setError } = useCityList(cities, allWeather, onSetAllWeather)
+
     return (
         <div>
             {
@@ -55,7 +57,7 @@ const CityList = ({ cities, onClickCity, onSetAllWeather, allWeather }) => {
             }
             <List>
                 {
-                    cities.map(cityAndCountry => renderCityAndCountry(onClickCity)(cityAndCountry, 
+                    cities.map(cityAndCountry => renderCityAndCountry(onClickCity)(cityAndCountry,
                         allWeather[getCityCode(cityAndCountry.city, cityAndCountry.countryCode)]))
                 }
             </List>
