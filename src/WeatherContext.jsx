@@ -1,16 +1,8 @@
-import React, { useReducer, useContext } from 'react'
+import React, { useReducer,useContext } from 'react'
 
-
-const WeatherStateContext = React.createContext()
+const WeatherStatecontext = React.createContext()
 
 const WeatherDispatchContext = React.createContext()
-
-
-const initialValue = {
-    allWeather: {},
-    allChartData: {}, 
-    allForecastItemList: {}
-}
 
 const reducer = (state, action) => {
     switch (action.type) {
@@ -18,51 +10,49 @@ const reducer = (state, action) => {
             const weatherCity = action.payload
             const newAllWeather = { ...state.allWeather, ...weatherCity }
             return { ...state, allWeather: newAllWeather }
+
         case 'SET_CHART_DATA':
-            const chartDataCity = action.payload 
+            const chartDataCity = action.payload
             const newAllChartData = { ...state.allChartData, ...chartDataCity }
             return { ...state, allChartData: newAllChartData }
         case 'SET_FORECAST_ITEM_LIST':
             const forecastItemListCity = action.payload
             const newAllForecastItemListCity = { ...state.allForecastItemList, ...forecastItemListCity }
             return { ...state, allForecastItemList: newAllForecastItemListCity }
+
         default:
-            return state 
+            return state
     }
 }
-
-const WeatherContext = ({children}) => {
+const WeatherContext = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialValue)
     return (
         <WeatherDispatchContext.Provider value={dispatch}>
-            <WeatherStateContext.Provider value={state}>
+            <WeatherStatecontext.Provider value={state}>
                 {children}
-            </WeatherStateContext.Provider>
-        </WeatherDispatchContext.Provider>    )
+            </WeatherStatecontext.Provider>
+        </WeatherDispatchContext.Provider>)
+
+}
+const useWeatherDispatchContext=()=>{
+const dispatch=useContext(WeatherDispatchContext)
+return dispatch
+}
+const useWeatherStatecontext=()=>{
+const state=useContext(WeatherStatecontext)
+return state
 }
 
-const useWeatherDispatchContext = () => {
-    const dispatch = useContext(WeatherDispatchContext)
+const initialValue = {
 
-    if (!dispatch) {
-        throw Error("Must set dispatch provider")
-    }
+    allWeather: {},
+    allChartData: {},
+    allForecastItemList: {}
 
-    return dispatch
 }
 
-const useWeatherStateContext = () => {
-    const state = useContext(WeatherStateContext)
-
-    if (!state) {
-        throw Error("Must set state provider")
-    }    
-
-    return state    
-}
-
-export { 
-    WeatherContext, 
-    useWeatherDispatchContext, 
-    useWeatherStateContext
+export {
+    WeatherContext,
+    useWeatherDispatchContext,
+    useWeatherStatecontext
 }

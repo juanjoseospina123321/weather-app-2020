@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, {  useMemo } from 'react'
 import Grid from '@material-ui/core/Grid'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import AppFrame from './../components/AppFrame'
@@ -11,8 +11,10 @@ import useCityPage from './../hooks/useCityPage'
 import useCityList from './../hooks/useCityList'
 import { getCityCode } from './../utils/utils'
 import { getCountryNameByCountryCode } from './../utils/serviceCities'
-
-const CityPage = ({actions, data}) => {
+import { useWeatherDispatchContext, useWeatherStatecontext } from '../WeatherContext'
+const CityPage = () => {
+    const actions = useWeatherDispatchContext()
+    const data = useWeatherStatecontext()
     const { allWeather, allChartData, allForecastItemList } = data
    // const { onSetAllWeather, onSetChartData, onSetForecastItemList } = actions
     const { city, countryCode } = useCityPage(allChartData, allForecastItemList,actions)

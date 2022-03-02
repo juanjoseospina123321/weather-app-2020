@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
 import Alert from '@material-ui/lab/Alert'
 import Grid from '@material-ui/core/Grid'
@@ -8,18 +8,19 @@ import useCityList from './../../hooks/useCityList'
 import CityInfo from './../CityInfo'
 import Weather from './../Weather'
 import { getCityCode } from './../../utils/utils'
+import { useWeatherDispatchContext, useWeatherStatecontext } from '../../WeatherContext'
 
-const areEqual=(prev,next)=>{
+const areEqual = (prev, next) => {
     debugger
-    console.log("city",  prev.city === next.city  )
-    console.log("countryCode",  prev.countryCode === next.countryCode  )
-    console.log("country",  prev.country=== next.country  )
-    console.log("weather",  prev.weather === next.weather  )
-    console.log("eventOnClickCity",  prev.eventOnClickCity === next.eventOnClickCity  )
+    console.log("city", prev.city === next.city)
+    console.log("countryCode", prev.countryCode === next.countryCode)
+    console.log("country", prev.country === next.country)
+    console.log("weather", prev.weather === next.weather)
+    console.log("eventOnClickCity", prev.eventOnClickCity === next.eventOnClickCity)
     return false
 }
 
-const CityListItem = React.memo(({city, countryCode, country, eventOnClickCity, weather}) => {
+const CityListItem = React.memo(({ city, countryCode, country, eventOnClickCity, weather }) => {
     return (
         <ListItem
             button
@@ -45,7 +46,7 @@ const CityListItem = React.memo(({city, countryCode, country, eventOnClickCity, 
         </ListItem>
     )
 }, areEqual)
-CityListItem.displayName='CityListItem'
+CityListItem.displayName = 'CityListItem'
 
 // li: es un item (según tag html, tiene el role "listitem")
 // renderCityAndCountry se va a convertir en una función que retorna otra función
@@ -62,7 +63,9 @@ const renderCityAndCountry = eventOnClickCity => (cityAndCountry, weather) => {
 
 // cities: es un array, y en cada item tiene que tener la ciudad, pero además el country
 // ul: tag html para listas no ordenadas
-const CityList = ({ cities, onClickCity, actions, data }) => {
+const CityList = ({ cities, onClickCity }) => {
+    const actions = useWeatherDispatchContext()
+    const data = useWeatherStatecontext()
     const { allWeather } = data
     // const { onSetAllWeather } = actions
 
