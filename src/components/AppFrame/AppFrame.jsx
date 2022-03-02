@@ -10,8 +10,10 @@ import Typography from '@material-ui/core/Typography'
 import Toolbar from '@material-ui/core/Toolbar'
 import { WiDaySunny } from 'react-icons/wi'
 import ErrorBoundary from './../../generic/ErrorBoundary'
+import { useMemo } from 'react'
 
 const AppFrame = ({ children }) => {
+    const IconContextSize=useMemo(() => ({size:'2em'}),[])
     return (
         <Grid container
             justify="center">
@@ -23,7 +25,7 @@ const AppFrame = ({ children }) => {
                             to="/main" 
                             color="inherit" 
                             aria-label="menu">
-                            <IconContext.Provider value={{size:'2em'}}>
+                            <IconContext.Provider value={IconContextSize}>
                                 <WiDaySunny />
                             </IconContext.Provider>
                         </Link>

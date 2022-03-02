@@ -6,8 +6,10 @@ import Typography from '@material-ui/core/Typography'
 import { Link as RouterLink } from 'react-router-dom'
 import { IconContext } from 'react-icons'
 import { WiDaySunny } from 'react-icons/wi'
+import { useMemo } from 'react'
 
 const WelcomePage = () => {
+   const WelcomePageSize=useMemo(() => ({ size:"6em" }), []) 
     return (
         <WelcomeScreen>
             <Grid container
@@ -19,7 +21,7 @@ const WelcomePage = () => {
                         justify="center"
                         alignItems="center">
                         <Grid item>
-                            <IconContext.Provider value={{ size:"6em" }}>
+                            <IconContext.Provider value={WelcomePageSize}>
                                 <WiDaySunny />
                             </IconContext.Provider>
                         </Grid>
